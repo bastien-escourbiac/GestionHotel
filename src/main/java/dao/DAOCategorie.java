@@ -5,64 +5,75 @@ import java.sql.PreparedStatement;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collection;
+import java.util.Optional;
 
 import model.Categorie;
+import model.Collection;
 import utils.ConnexionHProject;
 
 
 
-public class DAOCategorie extends DAO<Categorie> {
-	//Csteur
-	public DAOCategorie(ConnexionHProject pCxion) {
-		super(pCxion);		
+public class DAOCategorie extends DAOPostgreSql<Categorie> {
+	
+	public DAOCategorie(ConnexionHProject pConnexion) {
+		super(pConnexion);
+		reqInsert 	= "INSERT into categorie VALUES(?,?)";
+		reqUpdate	= "";
+		reqDelete	= "";
+		reqFindById	= "SELECT * FROM categorie WHERE nucat = ?";
+		reqFindAll	= "SELECT * FROM categorie";
+		
 	}
 	
 	@Override
-	//to do throws exception
-	public Categorie create(Categorie c) {
+	public int executeInsert (PreparedStatement stmt, Categorie objACreer) {
+		try {
+			stmt.setInt(1, objACreer.getNuCat());
+			stmt.setString(2, objACreer.getNomCat());
+			System.out.println("insert okkkkkkkkkkkkkkkk");
+			stmt.executeUpdate();
+		}catch(SQLException e) {
+			System.out.println("impossible de créer la catégorie");
+		}
+	return objACreer.getNuCat();
+	}
+	
+	
+	
+	
+	/*public void delete(int idADelete) throws SQLException {
+		String sql = "DELETE FROM categorie WHERE nuCat= "+idADelete;
+		try {
+			 PreparedStatement stmt 	= getConnection().prepareStatement(sql,ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			 //exécution de la requete
+			 stmt.executeUpdate();
+			 System.out.println("L'objet avec l'id "+idADelete+" a été effacé.");
+			} catch  (SQLException e) {
+				e.printStackTrace();
+			 System.out.println("not delete");
+			}		
 		
-			//Requête à exécuter
-			String sql = "INSERT INTO categorie (nomcat) VALUES (?)";
-			 try {
-				 //Préparation de la requête
-				 PreparedStatement stmt 	= getCxion().getC().prepareStatement(sql,ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
-				 
-				 //Modification à apporter aux attributs de l'objet dans les champs
-				 stmt.setString(1, c.getNomCat());
-				 //exécution de la requete
-				 stmt.executeUpdate();
-			 } catch  (SQLException e) {
-					
-				} 
-			return c;
+	}*/
+	
+
+
+	@Override
+	public Optional<Categorie> rsToObj(ResultSet rs) {
+		try {
+			return Optional.ofNullable(	new Categorie(rs.getInt(1), rs.getString(2)) );
+			} catch (SQLException e) 
+				{
+					e.printStackTrace();
+				}
+				return Optional.empty();
 			}
+			
+
+
 	
 
 
-	@Override
-	public model.Categorie update(model.Categorie objACReer) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
-	@Override
-	public void delete(int idADelete) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public model.Categorie findById(int idATrouver) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Collection<model.Categorie> findAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
+	
 }

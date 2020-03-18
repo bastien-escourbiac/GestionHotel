@@ -13,22 +13,25 @@ public class DAOFactory {
 	private ConnexionHProject cxion = null;
 	
 	//Constructeur
+	public DAOFactory () {
+		
+	}
+	
 	public DAOFactory(ConnexionHProject c) {
 		this.cxion = c;
 	}
 	
-	//Méthode
-	@SuppressWarnings("rawtypes")
-	public DAO getDAO (int i) {
+	//Méthode qui va instancier les différentes DAO
+	public dao.DAOCategorie getDAO (int i) {
 		switch (i) {
 			case DAOCategorie : 
 				return new DAOCategorie(cxion);
 			case DAOChambre : 
-				return new DAOChambre(cxion);
+				//return new DAOChambre(cxion);
 			case DAOCType : 
-				return new DAOCType(cxion);
+				//return new DAOCType(cxion);
 			case DAOHotel : 
-				return new DAOHotel(cxion);
+				//return new DAOHotel(cxion);
 			default :
 				return null;
 		}

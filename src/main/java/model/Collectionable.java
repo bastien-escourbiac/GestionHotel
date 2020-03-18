@@ -1,11 +1,10 @@
 package model;
 
-public abstract class Collectionable {
+public  class Collectionable {
 	
 	//Attributs
 	private int id;
-	//private String nom;
-	//private int qte;
+	
 	
 	//Constructeurs
 	public Collectionable() {
@@ -15,12 +14,10 @@ public abstract class Collectionable {
 		this.id = id;
 	}
 
-	
-	
+
 	//Accessseurs
 	public int getId() {
 		return id;
 	}
-
 	
 }
