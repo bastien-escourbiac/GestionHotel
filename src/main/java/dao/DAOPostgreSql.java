@@ -34,7 +34,9 @@ public abstract class DAOPostgreSql<T> {
 	}
 	
 	//METHODE ABSTRAITE DEFINI DANS LES DAO
-	public abstract int executeInsert(PreparedStatement ps, T objACreer);
+	public abstract int executeInsert	(PreparedStatement ps, T objACreer);
+	public abstract void executeDelete	(PreparedStatement ps, int idObj);
+	public abstract int executeUpdate	(PreparedStatement ps, T objAUpdate);
 	
 	
 	
@@ -44,11 +46,34 @@ public abstract class DAOPostgreSql<T> {
 			PreparedStatement stmt = getConnection().prepareStatement(reqInsert,ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY,ResultSet.HOLD_CURSORS_OVER_COMMIT);
 			executeInsert(stmt,objACReer);
 		}catch (SQLException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-		
 		return objACReer;
+		}
+	
+	public void delete(int idObject) {
+		try {
+			PreparedStatement stmt = getConnection().prepareStatement(reqDelete,ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY,ResultSet.HOLD_CURSORS_OVER_COMMIT);
+			//je donne l'id de l'objet a delete au statement
+			stmt.setInt(1,  idObject);
+			executeDelete(stmt, idObject);
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public  T update (T objAUpdate) {
+		try {
+			PreparedStatement stmt = getConnection().prepareStatement(reqUpdate,ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY,ResultSet.HOLD_CURSORS_OVER_COMMIT);
+			//je donne l'id de l'objet a update au statement
+			System.out.println("objet = "+objAUpdate);
+			
+			//TO DO DONNER LA LIGNE D INESRTION
+			executeUpdate(stmt,objAUpdate);
+		}catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+		return objAUpdate;
 		}
 	
 	

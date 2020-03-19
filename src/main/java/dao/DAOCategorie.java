@@ -18,8 +18,8 @@ public class DAOCategorie extends DAOPostgreSql<Categorie> {
 	public DAOCategorie(ConnexionHProject pConnexion) {
 		super(pConnexion);
 		reqInsert 	= "INSERT into categorie VALUES(?,?)";
-		reqUpdate	= "";
-		reqDelete	= "";
+		reqUpdate	= "UPDATE categorie SET nomcat=? WHERE nucat = ?";
+		reqDelete	= "DELETE FROM categorie WHERE nucat = ?";
 		reqFindById	= "SELECT * FROM categorie WHERE nucat = ?";
 		reqFindAll	= "SELECT * FROM categorie";
 		
@@ -30,13 +30,39 @@ public class DAOCategorie extends DAOPostgreSql<Categorie> {
 		try {
 			stmt.setInt(1, objACreer.getNuCat());
 			stmt.setString(2, objACreer.getNomCat());
-			System.out.println("insert okkkkkkkkkkkkkkkk");
 			stmt.executeUpdate();
+			System.out.println("insert ok");
 		}catch(SQLException e) {
 			System.out.println("impossible de créer la catégorie");
 		}
 	return objACreer.getNuCat();
 	}
+	
+	@Override
+	public void executeDelete(PreparedStatement stmt,int id) {
+		try {
+			System.out.println("id = "+ id);
+			stmt.executeUpdate();
+			System.out.println("obj delete");
+		} catch (SQLException e) {
+			System.out.println("not delete");
+		}
+	}
+	
+	@Override
+	public int executeUpdate(PreparedStatement stmt, Categorie objAUpdate) {
+		try {
+			stmt.setInt(1, objAUpdate.getNuCat());
+			stmt.setString(2, objAUpdate.getNomCat());
+			stmt.executeUpdate();
+			System.out.println("update ok");
+		}catch(SQLException e) {
+			System.out.println("impossible de faire l'update");
+		}
+	return objAUpdate.getNuCat();
+	}
+
+	
 	
 	
 	
@@ -67,6 +93,9 @@ public class DAOCategorie extends DAOPostgreSql<Categorie> {
 				}
 				return Optional.empty();
 			}
+
+	
+	
 			
 
 

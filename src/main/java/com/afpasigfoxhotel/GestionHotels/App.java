@@ -20,13 +20,7 @@ public class App
     {
         //ouverture de la connexion
         //ConnexionHProject connect = new ConnexionHProject("jdbc:postgresql://localhost:5432/db_hotel", "postgres", "afpa123", "org.postgresql.Driver");
-        
-    	
-    	//ouverture connexion SINGLETON
-    	//ConnexionHProject.getInstance();    	
-    	
-    	
-    	
+      
     	DAOFactory monUsineDAO = new DAOFactory();
         
         //insérer id plus params car script not in serial
@@ -35,6 +29,7 @@ public class App
         Categorie cat2 = new Categorie(7,"quadruple");
         Categorie cat3 = new Categorie(8,"quintuple");
         Categorie cat4 = new Categorie(9,"sextuple");
+        Categorie cat5 = new Categorie(1,"coucou");
        
         //CREATE
         //System.out.println(monUsineDAO.getDAO(DAOFactory.DAOCategorie).create(cat2));
@@ -52,7 +47,13 @@ public class App
         
         /***********************GENERICITE *****************************/
         //INSERT
-        System.out.println(monUsineDAO.getDAO(DAOFactory.DAOCategorie).insert(cat4));
+        //System.out.println(monUsineDAO.getDAO(DAOFactory.DAOCategorie).insert(cat4));
+        
+        //DELETE
+        //monUsineDAO.getDAO(DAOFactory.DAOCategorie).delete(9);
+        
+        //UPDATE
+        System.out.println(monUsineDAO.getDAO(DAOFactory.DAOCategorie).update(cat5));
         
         
        
