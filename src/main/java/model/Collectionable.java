@@ -19,5 +19,4 @@ public  class Collectionable {
 	public int getId() {
 		return id;
 	}
-	
 }

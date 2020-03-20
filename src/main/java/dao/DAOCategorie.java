@@ -22,26 +22,26 @@ public class DAOCategorie extends DAOPostgreSql<Categorie> {
 		reqDelete	= "DELETE FROM categorie WHERE nucat = ?";
 		reqFindById	= "SELECT * FROM categorie WHERE nucat = ?";
 		reqFindAll	= "SELECT * FROM categorie";
-		
 	}
 	
 	@Override
 	public int executeInsert (PreparedStatement stmt, Categorie objACreer) {
 		try {
-			stmt.setInt(1, objACreer.getNuCat());
+			stmt.setInt(1, objACreer.getId());
 			stmt.setString(2, objACreer.getNomCat());
 			stmt.executeUpdate();
 			System.out.println("insert ok");
 		}catch(SQLException e) {
 			System.out.println("impossible de créer la catégorie");
 		}
-	return objACreer.getNuCat();
+	return objACreer.getId();
 	}
 	
 	@Override
 	public void executeDelete(PreparedStatement stmt,int id) {
 		try {
-			System.out.println("id = "+ id);
+			//je donne l'id de l'objet a delete au statement
+			stmt.setInt(1,  id);
 			stmt.executeUpdate();
 			System.out.println("obj delete");
 		} catch (SQLException e) {
@@ -52,37 +52,16 @@ public class DAOCategorie extends DAOPostgreSql<Categorie> {
 	@Override
 	public int executeUpdate(PreparedStatement stmt, Categorie objAUpdate) {
 		try {
-			stmt.setInt(1, objAUpdate.getNuCat());
-			stmt.setString(2, objAUpdate.getNomCat());
+			stmt.setInt(2, objAUpdate.getId());
+			stmt.setString(1, objAUpdate.getNomCat());
 			stmt.executeUpdate();
 			System.out.println("update ok");
 		}catch(SQLException e) {
 			System.out.println("impossible de faire l'update");
 		}
-	return objAUpdate.getNuCat();
+	return objAUpdate.getId();
 	}
-
 	
-	
-	
-	
-	
-	/*public void delete(int idADelete) throws SQLException {
-		String sql = "DELETE FROM categorie WHERE nuCat= "+idADelete;
-		try {
-			 PreparedStatement stmt 	= getConnection().prepareStatement(sql,ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
-			 //exécution de la requete
-			 stmt.executeUpdate();
-			 System.out.println("L'objet avec l'id "+idADelete+" a été effacé.");
-			} catch  (SQLException e) {
-				e.printStackTrace();
-			 System.out.println("not delete");
-			}		
-		
-	}*/
-	
-
-
 	@Override
 	public Optional<Categorie> rsToObj(ResultSet rs) {
 		try {
@@ -94,15 +73,19 @@ public class DAOCategorie extends DAOPostgreSql<Categorie> {
 				return Optional.empty();
 			}
 
+	@Override
+	public void objToRs(PreparedStatement pStmt, Categorie objBaseToRs) {
+		try {
+			pStmt.setString(1, objBaseToRs.getNomCat());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	
+
 	
 	
-			
 
 
-	
-
-
-	
-
-	
 }

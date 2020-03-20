@@ -5,12 +5,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
+import java.sql.Statement;
+import model.Collectionable;
 
 import model.Categorie;
+import model.Collection;
 import utils.ConnexionHProject;
+import model.Categorie;;
 
 
-public abstract class DAOPostgreSql<T> {
+public abstract class DAOPostgreSql<T extends Collectionable> {
 
 	//Attributs
 	private ConnexionHProject cxion = null;
@@ -25,8 +29,6 @@ public abstract class DAOPostgreSql<T> {
 		this.cxion = cxion;
 	}
 	
-	
-	
 	//METHODES
 	//créée une instance de connexion si perdue ou si elle n existe pas
 	protected Connection getConnection() {
@@ -34,28 +36,28 @@ public abstract class DAOPostgreSql<T> {
 	}
 	
 	//METHODE ABSTRAITE DEFINI DANS LES DAO
-	public abstract int executeInsert	(PreparedStatement ps, T objACreer);
-	public abstract void executeDelete	(PreparedStatement ps, int idObj);
-	public abstract int executeUpdate	(PreparedStatement ps, T objAUpdate);
+	
+	public abstract int		executeInsert			(PreparedStatement ps, T objACreer);
+	public abstract void	executeDelete			(PreparedStatement ps, int idObj);
+	public abstract int 	executeUpdate			(PreparedStatement ps, T objAUpdate);
+	//fourniture d'un objet à partir des rs.getInt String qui sont spécifiques à chaque table de la bdd
+	public abstract Optional<T> rsToObj				(ResultSet rs);
+	public abstract void 		objToRs 			(PreparedStatement pStmt, T objBaseToRs);
 	
 	
-	
-	//Méthodes à implémenter 
-	public  T insert (T objACReer) {
+	public  T create (T objAUpdate) {
 		try {
 			PreparedStatement stmt = getConnection().prepareStatement(reqInsert,ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY,ResultSet.HOLD_CURSORS_OVER_COMMIT);
-			executeInsert(stmt,objACReer);
+			executeInsert(stmt,objAUpdate);
 		}catch (SQLException e1) {
 				e1.printStackTrace();
 			}
-		return objACReer;
+		return objAUpdate;
 		}
 	
 	public void delete(int idObject) {
 		try {
 			PreparedStatement stmt = getConnection().prepareStatement(reqDelete,ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY,ResultSet.HOLD_CURSORS_OVER_COMMIT);
-			//je donne l'id de l'objet a delete au statement
-			stmt.setInt(1,  idObject);
 			executeDelete(stmt, idObject);
 		}catch (SQLException e) {
 			e.printStackTrace();
@@ -65,26 +67,13 @@ public abstract class DAOPostgreSql<T> {
 	public  T update (T objAUpdate) {
 		try {
 			PreparedStatement stmt = getConnection().prepareStatement(reqUpdate,ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY,ResultSet.HOLD_CURSORS_OVER_COMMIT);
-			//je donne l'id de l'objet a update au statement
-			System.out.println("objet = "+objAUpdate);
-			
-			//TO DO DONNER LA LIGNE D INESRTION
 			executeUpdate(stmt,objAUpdate);
 		}catch (SQLException e1) {
 				e1.printStackTrace();
 			}
 		return objAUpdate;
 		}
-	
-	
-	
-	
-	
-	//METHODE ABSTRAITE
-	//implémentée par les dao filles
-	//fourniture d'un objet à partir des rs.getInt String qui sont spécifiques à chaque table de la bdd
-	public abstract Optional<T> rsToObj (ResultSet rs);
-	
+
 	//METHODES CONCRETES
 	//les méthodes findbyId et finAll sont les mêmes pour tous types de produits
 	public Optional<T> findById(int pIdObjetRecherche) {
@@ -94,7 +83,7 @@ public abstract class DAOPostgreSql<T> {
 			try {
 				//préparation de la requête
 				preparedStmt = getConnection().prepareStatement(reqFindById,ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY,ResultSet.HOLD_CURSORS_OVER_COMMIT);
-				
+				//je donne l'id de 'lobjet en question au statement
 				preparedStmt.setInt(1,  pIdObjetRecherche);
 				//exécution requete
 				ResultSet results = preparedStmt.executeQuery();
@@ -124,9 +113,37 @@ public abstract class DAOPostgreSql<T> {
 			}	
 		
 			return Optional.empty();
-		}
-
-
-
+		}	
 	
+	public Collection<T> findAll(){
+		Collection<T> maCollection = new Collection<T>();
+		PreparedStatement stmt = null;
+		try {
+			//prepa du statement avec connexion et req
+			stmt = getConnection().prepareStatement(reqFindAll);
+			//rs objet pour manipuler la table
+			ResultSet rs = stmt.executeQuery();//execution req
+			//évite de lever null pointer exception
+			Optional<T> optionalObjResultSet;
+			//boucle tant qu'il y a des éléments
+			while (rs.next()) {
+				//appel à la méthode abstraite
+				optionalObjResultSet = rsToObj(rs);
+				if(optionalObjResultSet.isPresent()) {
+					//ajout de l'élément à la collection
+					maCollection.addItem(optionalObjResultSet.get());
+				}
+			}
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+			return maCollection;
+		}
 }

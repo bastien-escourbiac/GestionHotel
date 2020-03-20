@@ -2,15 +2,11 @@ package model;
 
 public class TypeHotel extends Collectionable {
 	
-	private int nuType;
 	private String nomType;
-	
-	
+		
 	//Cstrcteur
-
 	public TypeHotel(int nuType, String nomType) {
-		super();
-		this.nuType = nuType;
+		super(nuType);
 		this.nomType = nomType;
 	}
 
@@ -24,14 +20,6 @@ public class TypeHotel extends Collectionable {
 	}
 	
 	//Accessseurs
-	public int getNuType() {
-		return nuType;
-	}
-
-	public void setNuType(int nuType) {
-		this.nuType = nuType;
-	}
-
 	public String getNomType() {
 		return nomType;
 	}
@@ -40,6 +28,11 @@ public class TypeHotel extends Collectionable {
 		this.nomType = nomType;
 	}
 
+	@Override
+	public String toString() {
+		return "TypeHotel [" + this.getId() + " nomCat=" + getNomType() + "]";
+	}
 
+	
 }
 	

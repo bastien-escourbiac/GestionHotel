@@ -1,28 +1,17 @@
 package model;
 
 public class Categorie extends Collectionable {
-	private int nuCat;
+	
 	private String nomCat;
 	
-
-	public Categorie(String nomCat) {
-		super();
-		this.nomCat = nomCat;
-	}
-	
+	//Cstrcteur
 	public Categorie(int nuCat, String nomCat) {
-		super();
-		this.nuCat = nuCat;
+		super(nuCat);
 		this.nomCat = nomCat;
 	}
 
 
 	public Categorie() {
-		// TODO Auto-generated constructor stub
-	}
-
-	public Categorie(int id) {
-		super(id);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -34,21 +23,8 @@ public class Categorie extends Collectionable {
 		this.nomCat = nomCat;
 	}
 
-	public int getNuCat() {
-		return nuCat;
-	}
-
-	public void setNuCat(int nuCat) {
-		this.nuCat = nuCat;
-	}
-
 	@Override
 	public String toString() {
-		return "Categorie [nuCat=" + getNuCat() + ", nomCat=" + getNomCat() + "]";
+		return "Categorie [" + this.getId() + " nomCat=" + getNomCat() + "]";
 	}
-	
-	
-	
-	
-
 }
