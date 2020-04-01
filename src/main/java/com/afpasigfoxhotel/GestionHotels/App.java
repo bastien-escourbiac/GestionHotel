@@ -68,9 +68,10 @@ public class App
         //collectionList.add(collectionTypeHotel); 
         
         collectionList.stream().map(e -> e.getCollection()).forEach(System.out::println);
+        System.out.println("cocucou");
         
         
-        blbalabla
+   
         
        
 

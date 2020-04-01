@@ -22,7 +22,7 @@ public abstract class DAO<T extends Collectionable>  {
 
 	public ConnexionHProject getCxion() {
 		return cxion;
-	}
+	}jurtujrtu
 
 	//Méthodes à implémenter 
 	public abstract T create (T objACReer);
