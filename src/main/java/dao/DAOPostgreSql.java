@@ -31,7 +31,7 @@ public abstract class DAOPostgreSql<T extends Collectionable> {
 	
 	//METHODES
 	//créée une instance de connexion si perdue ou si elle n existe pas
-	protected Connection getConnection() {
+	protected Connection getConnection() throws ClassNotFoundException {
 		return ConnexionHProject.getInstance();
 	}
 	
@@ -45,7 +45,7 @@ public abstract class DAOPostgreSql<T extends Collectionable> {
 	public abstract void 		objToRs 			(PreparedStatement pStmt, T objBaseToRs);
 	
 	
-	public  T create (T objAUpdate) {
+	public  T create (T objAUpdate) throws ClassNotFoundException {
 		try {
 			PreparedStatement stmt = getConnection().prepareStatement(reqInsert,ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY,ResultSet.HOLD_CURSORS_OVER_COMMIT);
 			executeInsert(stmt,objAUpdate);
@@ -55,7 +55,7 @@ public abstract class DAOPostgreSql<T extends Collectionable> {
 		return objAUpdate;
 		}
 	
-	public void delete(int idObject) {
+	public void delete(int idObject) throws ClassNotFoundException {
 		try {
 			PreparedStatement stmt = getConnection().prepareStatement(reqDelete,ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY,ResultSet.HOLD_CURSORS_OVER_COMMIT);
 			executeDelete(stmt, idObject);
@@ -64,7 +64,7 @@ public abstract class DAOPostgreSql<T extends Collectionable> {
 		}
 	}
 	
-	public  T update (T objAUpdate) {
+	public  T update (T objAUpdate) throws ClassNotFoundException {
 		try {
 			PreparedStatement stmt = getConnection().prepareStatement(reqUpdate,ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY,ResultSet.HOLD_CURSORS_OVER_COMMIT);
 			executeUpdate(stmt,objAUpdate);
@@ -76,7 +76,7 @@ public abstract class DAOPostgreSql<T extends Collectionable> {
 
 	//METHODES CONCRETES
 	//les méthodes findbyId et finAll sont les mêmes pour tous types de produits
-	public Optional<T> findById(int pIdObjetRecherche) {
+	public Optional<T> findById(int pIdObjetRecherche) throws ClassNotFoundException {
 		//Initialisation
 		PreparedStatement preparedStmt = null;
 			
@@ -115,7 +115,7 @@ public abstract class DAOPostgreSql<T extends Collectionable> {
 			return Optional.empty();
 		}	
 	
-	public Collection<T> findAll(){
+	public Collection<T> findAll() throws ClassNotFoundException{
 		Collection<T> maCollection = new Collection<T>();
 		PreparedStatement stmt = null;
 		try {

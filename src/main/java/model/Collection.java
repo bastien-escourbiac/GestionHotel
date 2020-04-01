@@ -9,7 +9,9 @@ public class Collection<T extends Collectionable>  {
 		//HaschMap collection clé valeur
 		//HaschMap implémente Map
 		//Type Integer et type T à définir lors de l'instanciation
-		private Map<Integer, T> collection =  new HashMap<>();
+	
+		//Collection a un attribut HMap mais ce n'est pas une Hmap
+		private Map<Integer, T> collection =  new HashMap<Integer, T>();
 		
 		//METHODES
 		// AJOUTER UN TYPE DE PRODUIT (hotel/chambre/type/catégorie)
@@ -25,10 +27,10 @@ public class Collection<T extends Collectionable>  {
 		//PAs besoin je pense
 		public Map<Integer, T> getCollection(){
 			return collection;
-		}
+		}			
 
 		@Override
-		public String toString() {
+		public String toString() {															
 			return "Collection [collection=" + collection + "]";
 		}
 		

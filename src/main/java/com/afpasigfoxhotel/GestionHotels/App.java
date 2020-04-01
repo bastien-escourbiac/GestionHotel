@@ -21,6 +21,7 @@ import java.util.*;
 public class App 
 {
     public static void main( String[] args ) throws SQLException  // On crée la connexion
+, ClassNotFoundException
     {
         
     	DAOFactory monUsineDAO = new DAOFactory();
@@ -62,8 +63,40 @@ public class App
         Collection<Categorie> collectionCategorie = monUsineDAO.getDAO(DAOFactory.DAOCategorie).findAll();
         Collection<TypeHotel> collectionTypeHotel = monUsineDAO.getDAO(DAOFactory.DAOTypeHotel).findAll();
         
+        List<Collection<?>> collectionList = new ArrayList<Collection<?>>();
+        collectionList.add(collectionCategorie);
+        //collectionList.add(collectionTypeHotel); 
         
-        //Je stock cette collection dans le HashMap
+        collectionList.stream().map(e -> e.getCollection()).forEach(System.out::println);
+        
+        
+        blbalabla
+        
+       
+
+        //System.out.println("--------------------");
+        
+        //System.out.println(collectionList);
+        
+        //Question1:
+        //Faut il faire une list de Collection ou des listes de collections que je manipulerai avec le stream? ok
+        
+        //Question2:
+        //Dans l'affichage de la console, jaffiche ma liste de collections categorie et typehotel.
+        //{2=Categorie [2 nomCat=coucou], 3=Categorie [3 nomCat=Famille], 4=Categorie 
+        // --                             --                              --             
+        //Je n'arrive pas à trouver d'ou viennet ces 2=  3= etc.... search all night longue sans succès.
+        
+        
+        
+    }
+ }     
+        
+        
+        
+        
+        
+      //Je stock cette collection dans le HashMap
         /*
         Map<Integer, Categorie> MapCategorie = collectionCategorie.getCollection();
         Map<Integer, TypeHotel> MapTypeHotel = collectionTypeHotel.getCollection(); 
@@ -86,23 +119,10 @@ public class App
 		
         System.out.println("--------------------");
          */
-        List<Collection<?>> collectionList = new ArrayList<Collection<?>>();
-        collectionList.add(collectionCategorie);
-        collectionList.add(collectionTypeHotel); 
         
-        collectionList.stream().map(e -> e.getCollection()).forEach(System.out::println);
-
-        System.out.println("--------------------");
-        
-        System.out.println(collectionList);
-        
-        //List<Categorie> CategorieList = new ArrayList<Categorie>(MapCategorie.values());
-        
-        //CategorieList.stream().map(e -> e.getNomCat()).forEach(System.out::println);
        
         
         
         
       
-    }
-}
+ 

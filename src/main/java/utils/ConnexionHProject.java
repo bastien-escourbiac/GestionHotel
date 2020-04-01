@@ -9,28 +9,31 @@ public class ConnexionHProject {
 		private String address;
 		private String name;
 		private String password;
-		private String driver;
+		
 		private Connection c;
 		
 		//Attributs SINGLETON
 		private String url = "jdbc:postgresql://localhost:5432/db_hotel";
 		private String user = "postgres";
 		private String pwd = "afpa123";
+		private String driver = "org.postgresql.Driver";
+		
 		
 		//Attribut de classe
 		private static Connection connect;
 		
 		//Constructeur privé
-		private ConnexionHProject() {
+		private ConnexionHProject() throws ClassNotFoundException {
 			try {
-				connect= DriverManager.getConnection(url, user, pwd);
+				Class.forName(driver);//Ajout pour accès JEE
+				connect= DriverManager.getConnection(url, user, pwd);//ajout driver
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
 		
 		//Méthode qui va retourner l'instance et la crééer si elle n'existe pas
-		public static Connection getInstance() {
+		public static Connection getInstance() throws ClassNotFoundException {
 			 try {
 					if(connect == null || !connect.isValid(0)){
 					  new ConnexionHProject();
